@@ -1,0 +1,252 @@
+<template>
+    <div id="app">
+
+        <el-row type="flex" justify="center">
+            <el-col :span="8">
+                <el-button plain>
+                {{WeatherData.cityname}}-{{WeatherData.weather}}-{{WeatherData.temp}}℃
+                </el-button>
+            </el-col>
+            <el-col :span="8" style="text-align: center">
+                <el-tag>
+                    <div style="font-size: 25px">{{date}}</div>
+                </el-tag>
+            </el-col>
+            <el-col :span="8"> </el-col>
+        </el-row>
+		<el-row type="flex" justify="center" :gutter="10" style="margin-top: 10vh;">
+  <el-col :span="2.5" :offset="4" ><el-select v-model="EngineValue" placeholder="请选择" style="width:120px" @change="currStationChange">
+            <el-option v-for="item in EngineOptions" :key="item.EngineValue" :label="item.name" :value="item.EngineValue">
+                <span>{{ item.name }}</span>
+                <img :src="item.defaultImage" style="height:32px;float: right">
+            </el-option>
+        </el-select></el-col>
+  <el-col :span="10"><el-input v-model="SearchKey" @keyup.enter.native="go()" ref="Focusing" :placeholder=hitokoto>
+                            <i slot="suffix" class="el-input__icon el-icon-search" @click="go()"></i>
+                        </el-input></el-col>
+</el-row>
+        
+		
+        <div style="margin: 150px 0"></div>
+        <el-row :gutter="18">
+            <el-col :md="6" :sm="12">
+                <el-card>
+                    <div slot="header">
+                        <span>
+              <img
+                style="height: 15px"
+                src="https://blogimg.s3.ladydaily.com/icons/78efd068-8302-435c-b086-fd920b928167.jpg"
+              />
+              百度热搜</span>
+                    </div>
+                    <div style="height: 49vh">
+                        <el-scrollbar style="height: 100%">
+                            <div v-for="(item,index) in BaiduData" :key="index">
+                                        <a :href="item.url" target="_blank" rel="noopener noreferrer"
+                                            style="display:inline;">{{index+1}}.
+                                            {{item.title}}<span
+                                                style="float: right; color: blue;">{{item.heat_score}}</span><i
+                                                class="el-icon-hot-water" style="float: right;"></i></a>
+
+                                <el-divider></el-divider>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :md="6" :sm="12">
+                <el-card>
+                    <div slot="header">
+                        <span>
+              <img
+                style="height: 15px"
+                src="https://blogimg.s3.ladydaily.com/icons/743a0b0d-69bf-4cce-81c4-d256c8948e55.jpg"
+              />
+              今日头条</span>
+                    </div>
+                    <div style="height: 49vh">
+                        <el-scrollbar style="height: 100%">
+                            <div v-for="(item,index) in ToutiaoData" v-bind:key="index+1">
+                                <a :href="item.url" target="_blank" style="display: inline">{{index+1}}.
+                                    {{item.title}}</a>
+
+                                <el-divider></el-divider>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :md="6" :sm="12">
+                <el-card>
+                    <div slot="header">
+                        <span>
+              <img
+                style="height: 15px"
+                src="https://blogimg.s3.ladydaily.com/icons/72204d0b-7233-4091-82e8-39285b0516ff.jpg"
+              />
+              聚合热榜</span>
+                    </div>
+                    <div style="height: 49vh">
+                        <el-scrollbar style="height: 100%">
+                            <div v-for="(item,index) in TophubData" v-bind:key="index+2">
+                                        <a :href="item.url" target="_blank" rel="noopener noreferrer"
+                                            style="display:inline;">{{index+1}}. {{item.title}}
+                                            <span style="float: right; color: blue;">{{item.sitename}}</span><i
+                                                class="el-icon-ice-cream-round" style="float: right;"></i></a>
+
+                                <el-divider></el-divider>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </el-card>
+            </el-col>
+            <el-col :md="6" :sm="12">
+                <el-card>
+                    <div slot="header">
+                        <span>
+              <img
+                style="height: 15px"
+                src="https://blogimg.s3.ladydaily.com/icons/2f270abe-01f8-4d8c-8df9-5ef8dd323c9c.jpg"
+              />
+              知乎热搜</span>
+                    </div>
+                    <div style="height: 49vh">
+                        <el-scrollbar style="height: 100%">
+                            <div v-for="(item,index) in ZhihuData" v-bind:key="index+3">
+                                <a :href="item.url" target="_blank" style="display: inline">{{index+1}}.
+                                    {{item.title}}</a>
+
+                                <el-divider></el-divider>
+                            </div>
+                        </el-scrollbar>
+                    </div>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'App',
+  data() {
+    return{
+                   EngineOptions: [{
+                        EngineValue: 'https://www.baidu.com/s?wd=',
+                        name: '百度',
+                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/d6708b8f-e584-4863-9777-a358a0cfbec8.ico',
+                    }, {
+                        EngineValue: 'https://www.google.com/search?q=',
+                        name: '谷歌',
+                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/eaf2dee7-4ac3-4dbd-8838-4ba6d5631338.png',
+                    },
+                    {
+                        EngineValue: 'https://cn.bing.com/search?q=',
+                        name: '必应',
+                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/ea4fe117-996f-4c80-84bb-d92096799125.ico',
+                    },
+                    {
+                        EngineValue: 'https://zh.wikipedia.org/wiki/',
+                        name: '维基百科',
+                        defaultImage: '',
+                    }
+                    ],
+                    EngineValue: 'https://www.google.com/search?q=',
+                    SearchKey: '',
+		BaiduData: '',
+		ZhihuData: '',
+		ToutiaoData: '',
+		TophubData: '',
+		date: new Date(),
+        WeatherData: '',
+        hitokoto: '',
+    }
+  },			created(){
+				if (localStorage.getItem("SearchUrl") != null) {
+					this.EngineValue = window.localStorage.getItem('SearchUrl');
+				}
+
+			},
+            methods: {
+				currStationChange(val) {
+					window.localStorage.setItem('SearchUrl', val)
+console.log(val)
+				},
+                go() {
+                    var substance = this.EngineValue + this.SearchKey;
+                    window.open(substance);
+                },
+            },
+            
+ mounted() {
+     this.$refs.Focusing.focus();
+    this.$http.get('https://v.hpassword.tk/baidu.json?' + new Date().getTime())
+     .then((GetBaiduData) =>{this.BaiduData = GetBaiduData.data.data})
+    this.$http.get('https://v.hpassword.tk/zhihu.json?' + new Date().getTime())
+     .then((GetZhihuData) =>{this.ZhihuData = GetZhihuData.data.data})
+    this.$http.get('https://v.hpassword.tk/toutiao.json?' + new Date().getTime())
+     .then((GetToutiaoData) =>{this.ToutiaoData = GetToutiaoData.data.data})
+    this.$http.get('https://v.hpassword.tk/tophub.json?' + new Date().getTime())
+     .then((GetTophubData) =>{this.TophubData = GetTophubData.data.data.items})
+     this.$http.get('https://v.hpassword.tk/netlify/weather.json')
+     .then((GetWeatherData) =>{this.WeatherData = GetWeatherData.data.data.weather})
+    this.$http.get('https://v1.hitokoto.cn/')
+     .then((Gethitokoto) =>{this.hitokoto = Gethitokoto.data.hitokoto})
+    this.timer = setInterval(()=> {
+      this.date = new Date().toLocaleString();
+    });
+},
+beforeDestroy: function() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  },
+}
+</script>
+<style>
+    .hot-container {
+        margin-top: 80px;
+    }
+    .el-scrollbar__wrap {
+        overflow-x: hidden;
+    }
+
+html { overflow-x:hidden;
+background-image: url("https://api.muvip.cn/api/bing");
+}
+
+
+    a {
+        text-decoration: none;
+        color: black;
+        display: block;
+    }
+
+    .weathers {
+        top: 0;
+        left: 0;
+        width: 300px;
+        height: 200px;
+        display: inline-block;
+        font-size: 15px;
+        /* 设置字体大小为20px */
+        line-height: 200px;
+    }
+
+    @font-face {
+        font-family: Alibaba-PuHuiTi;
+        font-style: normal;
+        font-display: swap;
+        src: url("https://blogimg.s3.ladydaily.com/Alibaba-PuHuiTi-Regular.subset.woff2") format("woff2");
+    }
+
+    * {
+        font-family: Alibaba-PuHuiTi;
+
+    }
+</style>
+<style scoped>
+    #form>>>.el-button {
+        background: red;
+    }
+</style>

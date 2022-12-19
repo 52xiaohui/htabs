@@ -18,7 +18,6 @@
   <el-col :span="2.5" :offset="4" ><el-select v-model="EngineValue" placeholder="请选择" style="width:120px" @change="currStationChange">
             <el-option v-for="item in EngineOptions" :key="item.EngineValue" :label="item.name" :value="item.EngineValue">
                 <span>{{ item.name }}</span>
-                <img :src="item.defaultImage" style="height:32px;float: right">
             </el-option>
         </el-select></el-col>
   <el-col :span="10"><el-input v-model="SearchKey" @keyup.enter.native="go()" ref="Focusing" :placeholder=hitokoto>
@@ -134,21 +133,17 @@ export default {
                    EngineOptions: [{
                         EngineValue: 'https://www.baidu.com/s?wd=',
                         name: '百度',
-                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/d6708b8f-e584-4863-9777-a358a0cfbec8.ico',
                     }, {
                         EngineValue: 'https://www.google.com/search?q=',
                         name: '谷歌',
-                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/eaf2dee7-4ac3-4dbd-8838-4ba6d5631338.png',
                     },
                     {
                         EngineValue: 'https://cn.bing.com/search?q=',
                         name: '必应',
-                        defaultImage: 'https://vkceyugu.cdn.bspapp.com/VKCEYUGU-3ba24a3f-84f5-4a10-b600-50170692426f/ea4fe117-996f-4c80-84bb-d92096799125.ico',
                     },
                     {
                         EngineValue: 'https://zh.wikipedia.org/wiki/',
                         name: '维基百科',
-                        defaultImage: '',
                     }
                     ],
                     EngineValue: 'https://www.google.com/search?q=',
@@ -212,7 +207,7 @@ beforeDestroy: function() {
     }
 
 html { overflow-x:hidden;
-background-image: url("https://blogimg.s3.ladydaily.com/icons/cool-background%20%281%29.png");
+background-image: url("https://blogimg.s3.ladydaily.com/icons/a1u3v-vjo0a.webp");
 background-size:cover;
 }
 

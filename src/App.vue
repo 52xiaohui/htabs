@@ -7,7 +7,7 @@
 				</el-button>
 			</el-col>
 			<el-col :span="8" style="text-align: center">
-				<el-tag>
+				<el-tag type="success">
 					<div style="font-size: 25px">{{date}}</div>
 				</el-tag>
 			</el-col>
@@ -27,10 +27,10 @@
 			</el-input>
 		</div>
 
-		<div style="margin: 150px 0"></div>
+		<div style="margin-top: 15vh;"></div>
 		<el-row :gutter="18">
 			<el-col :md="6" :sm="12">
-				<el-card>
+				<el-card style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
 					<div slot="header">
 						<span>
 							<img style="height: 15px"
@@ -114,6 +114,9 @@
 				</el-card>
 			</el-col>
 		</el-row>
+		<div class="footer">
+			<p>Copyright © 2022 梨清回</p>
+		</div>
 	</div>
 </template>
 
@@ -167,7 +170,7 @@
 		},
 
 		mounted() {
-			this.$refs.Focusing.focus();
+			// this.$refs.Focusing.focus();
 			this.$http.get('https://ash623941490038.hostsh1.99web.top/data/baidu.php?' + new Date().getTime())
 				.then((GetBaiduData) => {
 					this.BaiduData = GetBaiduData.data.data
@@ -257,9 +260,20 @@
 	.select {
 		margin-right: 5px;
 	}
+
+	.footer {
+		justify-content: center;
+		text-align: center;
+	}
 </style>
 <style scoped>
 	#form>>>.el-button {
 		background: red;
+	}
+
+	.el-card ::v-deep .el-card__header {
+		padding: 10px 10px;
+		background-color: rgb(253, 242, 242);
+		box-shadow: 0 2px 12px 0 rgba(31, 25, 25, 0.1);
 	}
 </style>

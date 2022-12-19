@@ -4,7 +4,7 @@
         <el-row type="flex" justify="center">
             <el-col :span="8">
                 <el-button plain>
-                {{WeatherData.cityname}}-{{WeatherData.weather}}-{{WeatherData.temp}}℃
+                {{WeatherData.city}}-{{WeatherData.weather}}-{{WeatherData.temperature}}℃
                 </el-button>
             </el-col>
             <el-col :span="8" style="text-align: center">
@@ -14,7 +14,7 @@
             </el-col>
             <el-col :span="8"> </el-col>
         </el-row>
-		<el-row type="flex" justify="center" :gutter="10" style="margin-top: 10vh;">
+		<el-row  :gutter="10" style="margin-top: 10vh; text-align: center;">
   <el-col :span="2.5" :offset="4" ><el-select v-model="EngineValue" placeholder="请选择" style="width:120px" @change="currStationChange">
             <el-option v-for="item in EngineOptions" :key="item.EngineValue" :label="item.name" :value="item.EngineValue">
                 <span>{{ item.name }}</span>
@@ -180,16 +180,16 @@ console.log(val)
             
  mounted() {
      this.$refs.Focusing.focus();
-    this.$http.get('https://v.hpassword.tk/baidu.json?' + new Date().getTime())
+    this.$http.get('https://ash623941490038.hostsh1.99web.top/data/baidu.php?' + new Date().getTime())
      .then((GetBaiduData) =>{this.BaiduData = GetBaiduData.data.data})
-    this.$http.get('https://v.hpassword.tk/zhihu.json?' + new Date().getTime())
+    this.$http.get('https://ash623941490038.hostsh1.99web.top/data/zhihu.php?' + new Date().getTime())
      .then((GetZhihuData) =>{this.ZhihuData = GetZhihuData.data.data})
-    this.$http.get('https://v.hpassword.tk/toutiao.json?' + new Date().getTime())
+    this.$http.get('https://ash623941490038.hostsh1.99web.top/data/toutiao.php?' + new Date().getTime())
      .then((GetToutiaoData) =>{this.ToutiaoData = GetToutiaoData.data.data})
-    this.$http.get('https://v.hpassword.tk/tophub.json?' + new Date().getTime())
+    this.$http.get('https://ash623941490038.hostsh1.99web.top/data/tophub.php?' + new Date().getTime())
      .then((GetTophubData) =>{this.TophubData = GetTophubData.data.data.items})
-     this.$http.get('https://v.hpassword.tk/netlify/weather.json')
-     .then((GetWeatherData) =>{this.WeatherData = GetWeatherData.data.data.weather})
+     this.$http.get('https://ash623941490038.hostsh1.99web.top/weather/')
+     .then((GetWeatherData) =>{this.WeatherData = GetWeatherData.data.lives[0]})
     this.$http.get('https://v1.hitokoto.cn/')
      .then((Gethitokoto) =>{this.hitokoto = Gethitokoto.data.hitokoto})
     this.timer = setInterval(()=> {
@@ -212,7 +212,8 @@ beforeDestroy: function() {
     }
 
 html { overflow-x:hidden;
-background-image: url("https://api.muvip.cn/api/bing");
+background-image: url("https://blogimg.s3.ladydaily.com/icons/cool-background%20%281%29.png");
+background-size:cover;
 }
 
 

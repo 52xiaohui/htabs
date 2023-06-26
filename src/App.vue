@@ -1,160 +1,264 @@
 <template>
 	<div id="app">
-	  <el-row type="flex" justify="center">
-		<el-col :span="8">
-		  <el-button plain>{{ weatherInfo }}</el-button>
-		</el-col>
-		<el-col :span="8" style="text-align: center">
-		  <el-tag type="success">
-			<div style="font-size: 25px">{{ formattedDate }}</div>
-		  </el-tag>
-		</el-col>
-		<el-col :span="8"></el-col>
-	  </el-row>
-	  <div class="container">
-		<el-select
-		  v-model="EngineValue"
-		  placeholder="请选择"
-		  class="select"
-		  style="width: 80px"
-		  @change="currStationChange"
-		>
-		  <el-option
-			v-for="item in EngineOptions"
-			:key="item.EngineValue"
-			:label="item.name"
-			:value="item.EngineValue"
-		  >
-			<span>{{ item.name }}</span>
-		  </el-option>
-		</el-select>
-		<el-input
-		  v-model="SearchKey"
-		  @keyup.enter.native="go()"
-		  ref="Focusing"
-		  :placeholder="hitokoto"
-		  style="width: 60vh"
-		>
-		  <i slot="suffix" class="el-input__icon el-icon-search" @click="go()"></i>
-		</el-input>
-	  </div>
-  
-	  <div style="margin-top: 15vh"></div>
-	  <el-row :gutter="18">
-		<el-col :md="6" :sm="12" v-for="category in newsCategories" :key="category.id">
-		  <el-card style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
-			<div slot="header">
-			  <span>{{ category.name }}</span>
-			</div>
-			<div style="height: 49vh">
-			  <el-scrollbar style="height: 100%">
-				<div v-for="(item, index) in category.data" :key="index">
-				  <a :href="item.url" target="_blank" style="display: inline">{{index + 1}}. {{ item.title }}</a>
-				  <el-divider></el-divider>
-				</div>
-			  </el-scrollbar>
-			</div>
-		  </el-card>
-		</el-col>
-	  </el-row>
-	  <div class="footer">
-		<p>Copyright © 2022 梨清回</p>
-	  </div>
+		<el-row type="flex" justify="center">
+			<el-col :span="8">
+				<el-button plain>
+					{{ WeatherData.city }}-{{ WeatherData.weather }}-{{ WeatherData.temperature}}℃
+				</el-button>
+			</el-col>
+			<el-col :span="8" style="text-align: center">
+				<el-tag type="success">
+					<div style="font-size: 25px">{{ formattedDate }}</div>
+				</el-tag>
+			</el-col>
+			<el-col :span="8"> </el-col>
+		</el-row>
+		<div class="container">
+			<el-select v-model="EngineValue" placeholder="请选择" class="select" style="width: 80px"
+				@change="currStationChange">
+				<el-option v-for="item in EngineOptions" :key="item.EngineValue" :label="item.name"
+					:value="item.EngineValue">
+					<span>{{ item.name }}</span>
+				</el-option>
+			</el-select>
+			<el-input v-model="SearchKey" @keyup.enter.native="go()" ref="Focusing" :placeholder="hitokoto"
+				style="width: 60vh">
+				<i slot="suffix" class="el-input__icon el-icon-search" @click="go()"></i>
+			</el-input>
+		</div>
+
+		<div style="margin-top: 15vh"></div>
+		<el-row :gutter="18">
+			<el-col :md="6" :sm="12">
+				<el-card style="box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)">
+					<div slot="header">
+						<span> 百度热搜</span>
+					</div>
+					<div style="height: 49vh">
+						<el-scrollbar style="height: 100%">
+							<div v-for="(item, index) in BaiduData" :key="index">
+								<a :href="item.url" target="_blank" style="display: inline">{{ index + 1 }}. {{ item.title }}</a>
+
+								<el-divider></el-divider>
+							</div>
+						</el-scrollbar>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :md="6" :sm="12">
+				<el-card>
+					<div slot="header">
+						<span> 今日头条</span>
+					</div>
+					<div style="height: 49vh">
+						<el-scrollbar style="height: 100%">
+							<div v-for="(item, index) in ToutiaoData" v-bind:key="index + 1">
+								<a :href="item.url" target="_blank" style="display: inline">{{ index + 1 }}. {{ item.title }}</a>
+
+								<el-divider></el-divider>
+							</div>
+						</el-scrollbar>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :md="6" :sm="12">
+				<el-card>
+					<div slot="header">
+						<span> 腾讯新闻</span>
+					</div>
+					<div style="height: 49vh">
+						<el-scrollbar style="height: 100%">
+							<div v-for="(item, index) in TxnewsData" v-bind:key="index + 1">
+								<a :href="item.url" target="_blank" style="display: inline">{{ index + 1 }}. {{ item.title }}</a>
+
+								<el-divider></el-divider>
+							</div>
+						</el-scrollbar>
+					</div>
+				</el-card>
+			</el-col>
+			<el-col :md="6" :sm="12">
+				<el-card>
+					<div slot="header">
+						<span> BiliBili</span>
+					</div>
+					<div style="height: 49vh">
+						<el-scrollbar style="height: 100%">
+							<div v-for="(item, index) in BilibiliData" v-bind:key="index + 1">
+								<a :href="item.url" target="_blank" style="display: inline">{{ index + 1 }}. {{ item.title }}</a>
+
+								<el-divider></el-divider>
+							</div>
+						</el-scrollbar>
+					</div>
+				</el-card>
+			</el-col>
+		</el-row>
+		<div class="footer">
+			<p>Copyright © 2022 梨清回</p>
+		</div>
 	</div>
-  </template>
-  
-  <script>
-  export default {
+</template>
+<script>
+export default {
 	name: 'App',
 	data() {
-	  return {
-		EngineOptions: [
-		  { EngineValue: 'https://www.baidu.com/s?wd=', name: '百度' },
-		  { EngineValue: 'https://www.google.com/search?q=', name: '谷歌' },
-		  { EngineValue: 'https://cn.bing.com/search?q=', name: '必应' },
-		  { EngineValue: 'https://zh.wikipedia.org/wiki/', name: '维基百科' },
-		  { EngineValue: 'https://duckduckgo.com/?q=', name: 'DuckDuckGo' },
-		],
-		EngineValue: 'https://cn.bing.com/search?q=',
-		SearchKey: '',
-		newsCategories: [
-		  { id: 'baidu', name: '百度热搜', data: [] },
-		  { id: 'bilibili', name: 'BiliBili', data: [] },
-		  { id: 'toutiao', name: '今日头条', data: [] },
-		  { id: 'txnews', name: '腾讯新闻', data: [] },
-		],
-		WeatherData: '',
-		hitokoto: '',
-	  };
+		return {
+			EngineOptions: [{
+				EngineValue: 'https://www.baidu.com/s?wd=',
+				name: '百度',
+			}, {
+				EngineValue: 'https://www.google.com/search?q=',
+				name: '谷歌',
+			},
+			{
+				EngineValue: 'https://cn.bing.com/search?q=',
+				name: '必应',
+			},
+			{
+				EngineValue: 'https://zh.wikipedia.org/wiki/',
+				name: '维基百科',
+			},
+			{
+				EngineValue: 'https://duckduckgo.com/?q=',
+				name: 'DuckDuckGo',
+			}
+			],
+			EngineValue: 'https://cn.bing.com/search?q=',
+			SearchKey: '',
+			BaiduData: '',
+			BilibiliData: '',
+			ToutiaoData: '',
+			TxnewsData: '',
+			WeatherData: '',
+			hitokoto: ''
+		};
 	},
 	computed: {
-	  formattedDate() {
-		return new Date().toLocaleString();
-	  },
-	  weatherInfo() {
-		const { city, weather, temperature } = this.WeatherData;
-		return `${city} - ${weather} - ${temperature}℃`;
-	  },
+		formattedDate() {
+			return new Date().toLocaleString();
+		}
 	},
 	created() {
-	  if (localStorage.getItem('SearchUrl') !== null) {
-		this.EngineValue = window.localStorage.getItem('SearchUrl');
-	  }
+		if (localStorage.getItem('SearchUrl') !== null) {
+			this.EngineValue = window.localStorage.getItem('SearchUrl');
+		}
 	},
 	methods: {
-	  currStationChange(val) {
-		window.localStorage.setItem('SearchUrl', val);
-	  },
-	  go() {
-		const substance = this.EngineValue + this.SearchKey;
-		window.open(substance);
-	  },
+		currStationChange(val) {
+			window.localStorage.setItem('SearchUrl', val);
+		},
+		go() {
+			const substance = this.EngineValue + this.SearchKey;
+			window.open(substance);
+		}
 	},
 	mounted() {
-	  const baseUrl = 'https://ash345075666518.icode.run/api/';
-	  const getNewsData = async (id) => {
-		const response = await fetch(baseUrl + 'News?source=' + id);
-		const data = await response.json();
-		return data;
-	  };
-  
-	  const getWeatherData = async () => {
-		const response = await fetch(baseUrl + 'Weather');
-		const data = await response.json();
-		return data;
-	  };
-  
-	  const getHitokoto = async () => {
-		const response = await fetch(baseUrl + 'Hitokoto');
-		const data = await response.json();
-		return data;
-	  };
-  
-	  this.newsCategories.forEach(async (category) => {
-		const newsData = await getNewsData(category.id);
-		category.data = newsData;
-	  });
-  
-	  this.WeatherData = await getWeatherData();
-	  this.hitokoto = await getHitokoto();
-  
-	  this.$nextTick(() => {
-		this.$refs.Focusing.focus();
-	  });
-	},
-  };
-  </script>
-  
-  <style scoped>
-  .container {
+		this.$http
+			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=baidu.json&' + new Date().getTime())
+			.then(({ data }) => {
+				this.BaiduData = data;
+			});
+
+		this.$http
+			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=bilibili.json&' + new Date().getTime())
+			.then(({ data }) => {
+				this.BilibiliData = data;
+			});
+
+		this.$http
+			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=toutiao.json&' + new Date().getTime())
+			.then(({ data }) => {
+				this.ToutiaoData = data;
+			});
+
+		this.$http
+			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=txnews.json&' + new Date().getTime())
+			.then(({ data }) => {
+				this.TxnewsData = data;
+			});
+
+		this.$http
+			.get('https://ash345075666518.hostsh1.99web.top/GetWeather.php')
+			.then(({ data }) => {
+				this.WeatherData = data.lives[0];
+			});
+
+		this.$http
+			.get('https://v1.hitokoto.cn/')
+			.then(({ data }) => {
+				this.hitokoto = data.hitokoto;
+			});
+	}
+};
+</script>
+<style>
+.hot-container {
+	margin-top: 80px;
+}
+
+.el-scrollbar__wrap {
+	overflow-x: hidden;
+}
+
+html {
+	overflow-x: hidden;
+	background-image: url("https://blogimg.s3.ladydaily.com/icons/a1u3v-vjo0a.webp");
+	background-size: cover;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+	display: block;
+}
+
+.weathers {
+	top: 0;
+	left: 0;
+	width: 300px;
+	height: 200px;
+	display: inline-block;
+	font-size: 15px;
+	/* 设置字体大小为20px */
+	line-height: 200px;
+}
+
+@font-face {
+	font-family: Alibaba-PuHuiTi;
+	font-style: normal;
+	font-display: swap;
+	src: url("https://blogimg.s3.ladydaily.com/Alibaba-PuHuiTi-Regular.subset.woff2") format("woff2");
+}
+
+* {
+	font-family: Alibaba-PuHuiTi;
+}
+
+.container {
+	margin-top: 10vh;
 	display: flex;
 	justify-content: center;
-	align-items: center;
-	margin-top: 10vh;
-  }
-  
-  .footer {
+}
+
+.select {
+	margin-right: 5px;
+}
+
+.footer {
+	justify-content: center;
 	text-align: center;
-	margin-top: 30px;
-  }
-  </style>
+}
+</style>
+<style scoped>
+#form>>>.el-button {
+	background: red;
+}
+
+.el-card ::v-deep .el-card__header {
+	padding: 10px 10px;
+	background-color: rgb(253, 242, 242);
+	box-shadow: 0 2px 12px 0 rgba(31, 25, 25, 0.1);
+}
+</style>
+  

@@ -64,11 +64,11 @@
 			<el-col :md="6" :sm="12">
 				<el-card>
 					<div slot="header">
-						<span> 腾讯新闻</span>
+						<span> 知乎热榜</span>
 					</div>
 					<div style="height: 49vh">
 						<el-scrollbar style="height: 100%">
-							<div v-for="(item, index) in TxnewsData" v-bind:key="index + 1">
+							<div v-for="(item, index) in ZhihuData" v-bind:key="index + 1">
 								<a :href="item.url" target="_blank" style="display: inline">{{ index + 1 }}. {{ item.title }}</a>
 
 								<el-divider></el-divider>
@@ -129,7 +129,7 @@ export default {
 			BaiduData: '',
 			BilibiliData: '',
 			ToutiaoData: '',
-			TxnewsData: '',
+			ZhihuData: '',
 			WeatherData: '',
 			hitokoto: ''
 		};
@@ -173,9 +173,9 @@ export default {
 			});
 
 		this.$http
-			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=txnews.json&' + new Date().getTime())
+			.get('https://ash345075666518.hostsh1.99web.top/hot/cors.php?file=zhihu.json&' + new Date().getTime())
 			.then(({ data }) => {
-				this.TxnewsData = data;
+				this.ZhihuData = data;
 			});
 
 		this.$http
